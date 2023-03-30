@@ -6,11 +6,14 @@ import core.web.responses.ResponseEnum;
 import model.*;
 import persistence.CityDatabase;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Provides an object that acts as a intermediary between the web service, the model and the persistence. It performs the
+ * actions necessary to fulfill the requests of the web service
+ */
 public class Controller {
 
     private final CityDatabase cityDatabase;
@@ -80,7 +83,7 @@ public class Controller {
         if(cityWithIncidenceToRetrieve == null) return new IncidenceDataAndResponseEnum(ResponseEnum.UNREGISTERED_CITY,null);
 
         //If everything is correct the record can be instantiated and add to the city's infected record info
-        ArrayList<DatedIncidenceRate> incidenceList = cityWithIncidenceToRetrieve.getIncidenceInDates(initialDate,finalDate);
+        ArrayList<DatedIncidenceRate> incidenceList = cityWithIncidenceToRetrieve.getIncidenceBetweenDates(initialDate,finalDate);
         ResponseEnum appropriateResponseEnum;
 
         if(incidenceList.isEmpty()){
