@@ -11,17 +11,29 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Provides an object that acts as a intermediary between the web service, the model and the persistence. It performs the
+ * Provides an object that acts as an intermediary between the web service, the model and the persistence. It performs the
  * actions necessary to fulfill the requests of the web service
  */
 public class Controller {
 
     private final CityDatabase cityDatabase;
 
+    /**
+     * This is the constructor. The cityDatabase is assigned.
+     * @param cityDatabase CityDatabase object which is assigned to the attribute of the same name. It will serve as
+     *                     persistence while the program is running.
+     */
     public Controller(CityDatabase cityDatabase) {
         this.cityDatabase = cityDatabase;
     }
 
+    /**
+     * This method responds to the request of creating a new city in the database. It performs minor validations and
+     * proceeds to add the city to the cityDatabase
+     * @param postCityInfoRequest PostCityInfoRequest object containing all the parameters necessary to create the new
+     *                            City entry in the database.
+     * @return ResponseEnum Enum value would depend on if the method succeeds or nor in the creation of a new city in the database.
+     */
     public ResponseEnum insertNewCityInfo(PostCityInfoRequest postCityInfoRequest){
 
         if(!postCityInfoRequest.getCurrentCity().matches("[a-zA-Z- ']+")){
@@ -36,6 +48,14 @@ public class Controller {
         return ResponseEnum.CITY_INFO_UPDATED;
     }
 
+    /**
+     * This method responds to the request of adding an incidence record to a particular city. It first performs minor validations
+     * and then proceeds to verify the city is in the database and to add the incidence record.
+     * @param postCityIncidenceRequest PostCityIncidenceRequest object containing all the parameters necessary to add an
+     *                                 incidence record to a city.
+     * @return ResponseEnum Enum value would depend on if the method succeeds or nor in the addition of an incidence record
+     * in the City's map of records.
+     */
     public ResponseEnum insertNewInfectedRecord(PostCityIncidenceRequest postCityIncidenceRequest){
 
         //Generating the local date for the record object instantiation
@@ -59,6 +79,16 @@ public class Controller {
         return ResponseEnum.CITY_INFO_UPDATED;
     }
 
+    /**
+     * This method responds to the request of retrieving the incidence rates for a particular city in a particular date interval.
+     * It first validates the information, then verifies the city is in the database and then returns the corresponding data.
+     * @param cityName String name of the city of interest
+     * @param country String name of the country of the city of interest
+     * @param preliminaryInitialDate LocalDate object, starting date of the date interval
+     * @param preliminaryFinalDate LocalDate object, last date of the date interval
+     * @return IncidenceDataAndResponseEnum object which is an encapsulation of the responseEnum which will vary depend
+     * on how successful the method was and if it succeeds this object also contains the data of interest.
+     */
     public IncidenceDataAndResponseEnum retrieveIncidenceResponse(String cityName, String country, LocalDate preliminaryInitialDate, LocalDate preliminaryFinalDate){
 
         LocalDate initialDate;
