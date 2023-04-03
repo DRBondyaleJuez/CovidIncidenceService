@@ -59,7 +59,7 @@ For further comprehension of the service you can consult this [API Documentation
 
 <div style="text-align: center;">
 
-[![API Doc image](https://user-images.githubusercontent.com/98281752/229177582-1f7c1338-bb81-4996-a2fc-0a5035bd626c.png)](https://app.swaggerhub.com/apis-docs/DANFL4_1/CovidIncidenceService/1.0.0)
+![API Doc image](https://user-images.githubusercontent.com/98281752/229496766-6d0f8b2a-5667-43ba-8cc5-da9a174be474.png)
 
 </div>
 
