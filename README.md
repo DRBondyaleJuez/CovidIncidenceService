@@ -45,6 +45,10 @@ of infected people the client is reporting. This will be then converted to incid
 - #### _/updateCityInfo_
 
 > Here a __POST__ method can be called providing a PostCityInfoRequest
+ 
+- #### _/swagger-ui/index.html_
+
+> Here the API documentation can be consulted in a swagger format
 
 The responses of all these endpoints will depend on the status of the action of the request mainly returning 200 status, but also it is
 coded to return 202 when a post is accepted and awaiting review, 204 if everything in the request is correct but there aren't 

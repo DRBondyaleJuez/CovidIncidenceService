@@ -1,0 +1,289 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DANFL4_1/CovidIncidenceService/1.0.0
+info:
+  version: "1.0.0"
+  title: CovidIncidenceService
+  description: The API for the project CovidIncidenceService
+paths:
+  /requestCityIncidence:
+    get:
+      tags:
+        - Device
+      description: returns the incidence data of a particular location in a particular interval of time
+      operationId: getCityIncidence
+      parameters:
+        - in: query
+          name: currentCity
+          required: true
+          description: the name of the city the incidence data that is going to be retrieved
+          schema:
+            type: string
+            example: Paris
+        - in: query
+          name: country
+          required: true
+          description: the name of the country of the city the incidence data that is going to be retrieved
+          schema:
+            type: string
+            example: France
+        - in: query
+          name: initialDate
+          required: true
+          description: the initial Date of the time interval of the incidence data that is going to be retrieved
+          schema:
+            type: object
+            format: LocalDate
+            pattern: yyyy-MM-dd
+            example: 2022-10-05
+        - in: query
+          name: finalDate
+          required: true
+          description: the final Date of the time interval of the incidence data that is going to be retrieved
+          schema:
+            type: object
+            format: LocalDate
+            pattern: yyyy-MM-dd
+            example: 2023-01-26
+      responses:
+        '200':
+          description: Success Response. The incidence information for that location at that time interval is returned in the form of the object GetCityIncidenceResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                format: GetCityIncidenceResponse
+                properties:
+                  country:
+                    type: string
+                    example: France
+                  city:
+                    type: string
+                    example: Paris
+                  message:
+                    type: string
+                    example: This is the incidence information for the city between the introduced dates.
+                  numberOfDatesWithIncidenceRateInfo:
+                    type: integer
+                    example: 10
+                  queriedIncidenceResponseList:
+                    type: array
+                    format: ArrayList<DatedIncidenceRate>
+                    items:
+                      properties:
+                        date:
+                          type: object
+                          format: LocalDate
+                          example: 2022-05-11
+                        incidenceRate:
+                          type: array
+                          format: TreeSet<Double>
+                          items:
+                            type: number
+                            example:
+                              156.23
+                              160.3
+        '204':
+          description: No content. There has been no error but there is no information for that city in that time interval
+          content:
+            application/json:
+              schema:
+                type: object
+                format: GetCityIncidenceResponse
+                properties:
+                  country:
+                    type: string
+                    example: France
+                  city:
+                    type: string
+                    example: Paris
+                  message:
+                    type: string
+                    example: There is no information on the incidence in the selected dates.
+                  numberOfDatesWithIncidenceRateInfo:
+                    type: integer
+                    example: 0
+                  queriedIncidenceResponseList:
+                    type: array
+                    format: ArrayList<DatedIncidenceRate>
+                    items:
+                      properties:
+                        date:
+                          type: object
+                          format: LocalDate
+                        incidenceRate:
+                          type: array
+                          format: TreeSet<Double>
+                          items:
+                            type: number
+        '404':
+          description: Unsucces response. No entry with that city name for that country has been found.
+          content:
+            application/json:
+              schema:
+                type: object
+                format: GetCityIncidenceResponse
+                properties:
+                  country:
+                    type: string
+                    example: France
+                  city:
+                    type: string
+                    example: Paris
+                  message:
+                    type: string
+                    example: Remember city names and country must be in english. The city name for that country is not present in the database. If you consider these have been correctly spelled please insert the cities information i.e. country and population.
+                  numberOfDatesWithIncidenceRateInfo:
+                    type: integer
+                    example: 0
+                  queriedIncidenceResponseList:
+                    type: array
+                    format: ArrayList<DatedIncidenceRate>
+                    items:
+                      properties:
+                        date:
+                          type: object
+                          format: LocalDate
+                        incidenceRate:
+                          type: array
+                          format: TreeSet<Double>
+                          items:
+                            type: number
+        '400':
+          description: Unsuccess response. The date range introduced is not a valid date interval. It preceeds the Covid pandemic or is posterior to current date.
+          content:
+            application/json:
+              schema:
+                type: object
+                format: GetCityIncidenceResponse
+                properties:
+                  country:
+                    type: string
+                    example: France
+                  city:
+                    type: string
+                    example: Paris
+                  message:
+                    type: string
+                    example: The date of the information posted precedes the beginning of the COVID pandemic, september 2019 or is after the current date.
+                  numberOfDatesWithIncidenceRateInfo:
+                    type: integer
+                    example: 0
+                  queriedIncidenceResponseList:
+                    type: array
+                    format: ArrayList<DatedIncidenceRate>
+                    items:
+                      properties:
+                        date:
+                          type: object
+                          format: LocalDate
+                        incidenceRate:
+                          type: array
+                          format: TreeSet<Double>
+                          items:
+                            type: number
+
+  /updateCityIncidence:
+    post:
+      tags:
+        - Device
+      description: Creates new or adds data to the information stored of a particular city
+      operationId: postCityIncidence
+      requestBody:
+        content:
+          application/jason:
+            schema:
+              type: object
+              format: PostCityIncidenceRequest
+              properties:
+                currentCity:
+                  type: string
+                  example: Paris
+                country:
+                  type: string
+                  example: France
+                numberOfInfected:
+                  type: integer
+                  example: 473
+                recordDate:
+                  type: object
+                  format: LocalDate
+                  pattern: yyyy-MM-dd
+                  example: 2023-03-19
+      responses:
+        '202':
+          description: Success Response. The incidence information for that location at that time is added to the data
+          content:
+            application/json:
+              schema:
+                type: object
+                format: PostCityIncidenceResponse
+                properties:
+                  message:
+                    type: string
+                    example: Thank you for introducing the information of a city. This information will be reviewed.
+        '400':
+          description:  Unsucces response. No entry with that city name for that country has been found or the date for the incidence isbefore the start of the covid pandemic or after the current date or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                type: object
+                format: PostCityIncidenceResponse
+                properties:
+                  message:
+                    type: string
+                    example: Remember city names and country must be in english. The city name for that country is not present in the database. If you consider these have been correctly spelled please insert the cities information i.e. country and population. || The date of the information posted precedes the beginning of the COVID pandemic, september 2019 or is after the current date.
+  /updateCityInfo:
+    post:
+      tags:
+        - Device
+      description: Creates new or adds data to the information stored of a particular city
+      operationId: postCityInfo
+      requestBody:
+        content:
+          application/jason:
+            schema:
+              type: object
+              format: PostCityInfoRequest
+              properties:
+                currentCity:
+                  type: string
+                  example: Paris
+                country:
+                  type: string
+                  example: France
+                population:
+                  type: integer
+                  example: 2856000
+      responses:
+        '202':
+          description: Success Response. The city information is registered for further uses.
+          content:
+            application/json:
+              schema:
+                type: object
+                format: PostCityInfoResponse
+                properties:
+                  message:
+                    type: string
+                    example: Thank you for introducing the information of a city. This information will be reviewed.
+        '400':
+          description:  Unsuccessful response. The format of the city or country introduced contains a character that is different from the regex epression [a-zA-Z- ']+ i.e. not a letter, minus sign, space or apostrophe.
+          content:
+            application/json:
+              schema:
+                type: object
+                format: PostCityIncidenceResponse
+                properties:
+                  message:
+                    type: string
+                    example: Remember city names and country must be in english. The city name for that country is not present in the database. If you consider these have been correctly spelled please insert the cities information i.e. country and population.
+  /swagger-ui/index.html:
+    get:
+      tags:
+        - Device
+      description: API documentation displayed with a Swagger UI
+      responses:
+        '200':
+          description: Success Response. The API documentation is displayed adequately
