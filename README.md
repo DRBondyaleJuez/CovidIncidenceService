@@ -1,5 +1,5 @@
 # 🌎🌍🌏 __COVID INCIDENCE SERVICE__ 🦠😷📝
-## A digital version of the classic 2 player game with the same name [(wiki/Connect_Four)](https://en.wikipedia.org/wiki/Connect_Four). Learning project in Java.
+## A simple service to report and retrieve COVID incidence in different cities using public participation. Project to showcase the use of Java and Spring.
 ___
 
 ![GitHub contributors](https://img.shields.io/github/contributors/DRBondyaleJuez/CovidIncidenceService)
